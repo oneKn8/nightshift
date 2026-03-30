@@ -18,3 +18,4 @@ venv/
 models/
 .nightshift/
 *.log
+nightshift_kb/
