@@ -11,12 +11,16 @@ from nightshift.utils import count_tokens
 
 # Approximate pricing per 1M tokens (input) as of March 2026
 MODEL_PRICING: dict[str, float] = {
+    "gpt-5.4-mini": 0.75,
+    "gpt-5.4": 2.00,
+    "gpt-4.1-mini": 0.40,
+    "gpt-4.1-nano": 0.10,
+    "gpt-4o": 2.50,
+    "gpt-4o-mini": 0.15,
     "claude-sonnet-4-20250514": 3.0,
     "claude-opus-4-20250514": 15.0,
     "claude-haiku-4-5-20251001": 0.80,
-    "gpt-4o": 2.50,
-    "gpt-4o-mini": 0.15,
-    "gemini-2.0-flash": 0.0,  # free tier
+    "gemini-2.0-flash": 0.0,
     "gemini-2.5-pro": 1.25,
     "deepseek-chat": 0.27,
     "local": 0.0,
