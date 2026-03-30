@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from nightshift.compression.pipeline import CompressionPipeline
+from nightshift.dispatch import Dispatcher
 from nightshift.routing.confidence import ConfidenceGate
 from nightshift.routing.dedup import ContentDedup
 from nightshift.history.window import SlidingWindowManager
@@ -40,6 +41,7 @@ class NightShift:
         self.history = SlidingWindowManager(self.config)
         self.tracker = TokenTracker(budget=self.config.api_budget)
         self.bandit = BudgetBandit()
+        self.dispatcher = Dispatcher()
 
     def complete(
         self,
@@ -103,8 +105,13 @@ class NightShift:
         self, messages: list[dict[str, str]], model: str, **kwargs: Any
     ) -> dict[str, Any]:
         """Send optimized messages to the actual LLM API."""
-        # TODO: implement multi-provider dispatch (OpenAI, Anthropic, local)
-        raise NotImplementedError("API dispatch coming in Phase 1")
+        result = self.dispatcher.dispatch_sync(messages, model, **kwargs)
+        return {
+            "content": result.content,
+            "model": result.model,
+            "input_tokens": result.input_tokens,
+            "output_tokens": result.output_tokens,
+        }
 
     def _best_effort_local(self, messages: list[dict[str, str]]) -> dict[str, Any]:
         """Budget exhausted. Return best local result."""
