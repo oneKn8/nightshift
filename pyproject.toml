@@ -1,14 +1,14 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "nightshift-runtime"
 version = "0.1.0"
 description = "Agent runtime that makes autonomous AI research 10x cheaper"
 readme = "README.md"
-license = "MIT"
-requires-python = ">=3.11"
+license = {text = "MIT"}
+requires-python = ">=3.10"
 authors = [
     { name = "Shifat Islam Santo", email = "shifatislamsanto764@gmail.com" },
 ]
@@ -17,7 +17,7 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
@@ -51,6 +51,9 @@ dev = [
 Homepage = "https://github.com/oneKn8/nightshift"
 Repository = "https://github.com/oneKn8/nightshift"
 Issues = "https://github.com/oneKn8/nightshift/issues"
+
+[tool.setuptools.packages.find]
+include = ["nightshift*"]
 
 [tool.ruff]
 target-version = "py311"
