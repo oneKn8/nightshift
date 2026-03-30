@@ -6,6 +6,8 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
+from nightshift.utils import count_tokens
+
 
 # Approximate pricing per 1M tokens (input) as of March 2026
 MODEL_PRICING: dict[str, float] = {
@@ -55,7 +57,7 @@ class TokenTracker:
 
     def can_afford(self, messages: list[dict[str, str]], model: str) -> bool:
         """Check if we can afford this API call within budget."""
-        estimated_tokens = sum(len(m.get("content", "")) // 4 for m in messages)
+        estimated_tokens = count_tokens(messages)
         estimated_cost = self._estimate_cost(estimated_tokens, model)
         return (self.spent + estimated_cost) <= self.budget
 
@@ -67,7 +69,7 @@ class TokenTracker:
     ) -> CallRecord:
         """Record an API call with its costs."""
         self._call_counter += 1
-        input_tokens = sum(len(m.get("content", "")) // 4 for m in messages)
+        input_tokens = count_tokens(messages)
         output_tokens = len(str(response)) // 4
         cost = self._estimate_cost(input_tokens, model)
         self.spent += cost
@@ -88,7 +90,7 @@ class TokenTracker:
     def record_local(self, messages: list[dict[str, str]]) -> None:
         """Record a call that was handled locally (API skipped)."""
         self._local_saves += 1
-        tokens_saved = sum(len(m.get("content", "")) // 4 for m in messages)
+        tokens_saved = count_tokens(messages)
         self._local_tokens_saved += tokens_saved
 
     def report(self) -> dict[str, Any]:
