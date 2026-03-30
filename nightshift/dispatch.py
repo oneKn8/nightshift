@@ -26,7 +26,7 @@ _PROVIDERS: dict[str, tuple[str, str, str]] = {
     "o1": ("openai", "https://api.openai.com/v1", "OPENAI_API_KEY"),
     "o3": ("openai", "https://api.openai.com/v1", "OPENAI_API_KEY"),
     "claude": ("anthropic", "https://api.anthropic.com/v1", "ANTHROPIC_API_KEY"),
-    "gemini": ("google", "https://generativelanguage.googleapis.com/v1beta", "GOOGLE_API_KEY"),
+    "gemini": ("google", "https://generativelanguage.googleapis.com/v1beta", "GEMINI_API_KEY"),
     "deepseek": ("deepseek", "https://api.deepseek.com/v1", "DEEPSEEK_API_KEY"),
 }
 

@@ -57,10 +57,10 @@ class TestTokenTracker:
         t.record_api(msgs, {"r": "ok"}, "unknown-model-xyz")
         assert t.spent > 0
 
-    def test_free_model_costs_zero(self):
+    def test_local_model_costs_zero(self):
         t = TokenTracker(budget=100.0)
         msgs = [{"role": "user", "content": "hi " * 1000}]
-        t.record_api(msgs, {"r": "ok"}, "gemini-2.0-flash")
+        t.record_api(msgs, {"r": "ok"}, "local")
         assert t.spent == 0.0
 
     def test_call_record_cost_per_insight(self):

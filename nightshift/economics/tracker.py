@@ -20,8 +20,8 @@ MODEL_PRICING: dict[str, float] = {
     "claude-sonnet-4-20250514": 3.0,
     "claude-opus-4-20250514": 15.0,
     "claude-haiku-4-5-20251001": 0.80,
-    "gemini-2.0-flash": 0.0,
-    "gemini-2.5-pro": 1.25,
+    "gemini-3-flash-preview": 0.50,
+    "gemini-3-pro-preview": 2.00,
     "deepseek-chat": 0.27,
     "local": 0.0,
 }
