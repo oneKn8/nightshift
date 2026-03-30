@@ -36,8 +36,9 @@ class TestEngineIntegration:
         engine = NightShift(api_budget=0.0)
         engine._dispatch = _mock_dispatch
         msgs = [{"role": "user", "content": "hi " * 1000}]
-        with pytest.raises(NotImplementedError, match="Best-effort"):
-            engine.complete(msgs, model="claude-opus-4-20250514", gate=False)
+        result = engine.complete(msgs, model="claude-opus-4-20250514", gate=False)
+        assert result["_budget_exhausted"] is True
+        assert result["model"] == "local"
 
     def test_report_after_calls(self, sample_messages):
         engine = NightShift(api_budget=10.0)

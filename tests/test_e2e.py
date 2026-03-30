@@ -52,8 +52,9 @@ class TestEndToEnd:
         engine = NightShift(api_budget=0.0, compress_threshold=50000)
         engine._dispatch = _mock_dispatch
         msgs = [{"role": "user", "content": "hi " * 500}]
-        with pytest.raises(NotImplementedError, match="Best-effort"):
-            engine.complete(msgs, model="claude-opus-4-20250514", gate=False)
+        result = engine.complete(msgs, model="claude-opus-4-20250514", gate=False)
+        assert result["_budget_exhausted"] is True
+        assert result["model"] == "local"
 
     def test_report_reflects_all_calls(self):
         engine = NightShift(api_budget=10.0, compress_threshold=50000)

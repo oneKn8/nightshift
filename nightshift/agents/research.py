@@ -46,22 +46,59 @@ class ResearchAgent(BaseAgent):
         self,
         knowledge_path: str = "./nightshift_kb",
         model: str = "gpt-5.4-mini",
+        use_models: bool = True,
         **engine_kwargs: Any,
     ) -> None:
         super().__init__(**engine_kwargs)
         self.kg = KnowledgeGraph(path=knowledge_path)
         self.model = model
+        self._use_models = use_models
         self._http = httpx.Client(
             timeout=30.0,
             headers={"User-Agent": "NightShift/0.1 (https://github.com/oneKn8/nightshift)"},
         )
-        self._summarizer = Summarizer(use_model=False)
-        self._reranker = Reranker(use_model=False)
+        # Models loaded lazily from engine's compression pipeline on first use
+        self._summarizer: Summarizer | None = None
+        self._reranker: Reranker | None = None
+
+    def _ensure_models(self) -> None:
+        """Lazy-load T5-small + MiniLM through the engine's compression pipeline."""
+        if self._summarizer is None:
+            if self._use_models:
+                self._summarizer = self.engine.compression._ensure_summarizer()
+            else:
+                self._summarizer = Summarizer(use_model=False)
+        if self._reranker is None:
+            if self._use_models:
+                self._reranker = self.engine.compression._ensure_reranker()
+            else:
+                self._reranker = Reranker(use_model=False)
 
     def run(self, topic: str, max_papers: int = 30, depth: str = "moderate") -> ResearchResult:
-        """Execute a full research run on a topic."""
+        """Execute a full research run on a topic.
+
+        Uses the engine's bandit to decide resource allocation:
+        - explore: broad paper search (default for new topics)
+        - deepen: more papers on known-good topic
+        - synthesize: fewer papers, comprehensive report
+        """
         start = time.time()
-        log.info(f"Starting research: {topic}")
+        self._ensure_models()
+
+        # Consult bandit for action guidance
+        action = self.engine.bandit.select()
+        log.info(f"Starting research: {topic} (bandit suggests: {action})")
+
+        # Adjust parameters based on bandit action
+        if action == "deepen":
+            max_papers = min(max_papers * 2, 100)
+            depth = "comprehensive"
+        elif action == "synthesize":
+            max_papers = min(max_papers, 10)
+            depth = "comprehensive"
+        elif action == "evaluate":
+            max_papers = min(max_papers, 10)
+            depth = "shallow"
 
         # Phase 1: Check existing knowledge
         existing = self.kg.query(topic, top_k=10)
@@ -125,7 +162,19 @@ class ResearchAgent(BaseAgent):
 
         # Phase 6: Synthesize via API (PAID, but only ~1-2K tokens input)
         compressed = "\n".join(f"- {f}" for f in ranked)
+        cost_before = self.engine.tracker.spent
         report = self._synthesize(topic, compressed, depth)
+        cost_after = self.engine.tracker.spent
+        api_cost = cost_after - cost_before
+
+        # Update bandit with reward: new facts per dollar spent
+        reward = len(facts) / max(api_cost, 0.0001) if facts else 0.1
+        import math
+        normalized_reward = min(math.log1p(reward) / 10.0, 1.0)
+        self.engine.bandit.update({
+            "_nightshift_action": action,
+            "_nightshift_reward": normalized_reward,
+        })
 
         duration = time.time() - start
         engine_report = self.report()
@@ -142,7 +191,8 @@ class ResearchAgent(BaseAgent):
         )
         log.info(
             f"Research complete: {len(papers)} papers, {len(facts)} facts, "
-            f"${engine_report['spent_usd']:.4f} spent, {duration:.1f}s"
+            f"${engine_report['spent_usd']:.4f} spent, {duration:.1f}s, "
+            f"action={action}, reward={normalized_reward:.3f}"
         )
         return result
 
