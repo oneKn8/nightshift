@@ -1,6 +1,10 @@
-# NightShift
+<p align="center">
+  <img src="assets/logo.svg" alt="NightShift" width="120" />
+</p>
 
-**The agent runtime that makes autonomous AI research 10x cheaper.**
+<h1 align="center">NightShift</h1>
+
+<p align="center"><strong>The agent runtime that makes autonomous AI research 10x cheaper.</strong></p>
 
 AI Scientist costs $15/paper. AI-Researcher burns 2-5M tokens per task. AutoResearch hits context limits by iteration 60.
 

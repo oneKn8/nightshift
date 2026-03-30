@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 80" width="400" height="80">
+  <!-- Nightcrew Logo + Wordmark (dark background version) -->
+  <!-- Owl icon -->
+  <g transform="translate(0, 0) scale(0.7)">
+    <ellipse cx="50" cy="58" rx="36" ry="38" fill="#312e81"/>
+    <ellipse cx="50" cy="68" rx="22" ry="22" fill="#3730a3"/>
+    <path d="M 26 28 Q 30 10 38 24" fill="#312e81"/>
+    <path d="M 74 28 Q 70 10 62 24" fill="#312e81"/>
+    <circle cx="36" cy="48" r="14" fill="#1e1b4b"/>
+    <circle cx="64" cy="48" r="14" fill="#1e1b4b"/>
+    <circle cx="36" cy="48" r="10" fill="#fbbf24"/>
+    <circle cx="64" cy="48" r="10" fill="#fbbf24"/>
+    <circle cx="38" cy="46" r="5" fill="#0a0a1a"/>
+    <circle cx="66" cy="46" r="5" fill="#0a0a1a"/>
+    <circle cx="40" cy="44" r="2.5" fill="white" opacity="0.8"/>
+    <circle cx="68" cy="44" r="2.5" fill="white" opacity="0.8"/>
+    <path d="M 46 58 L 50 64 L 54 58 Z" fill="#f97316"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="80" y="52" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="700" font-size="38" letter-spacing="1">
+    <tspan fill="#818cf8">night</tspan><tspan fill="#fbbf24">crew</tspan>
+  </text>
+</svg>

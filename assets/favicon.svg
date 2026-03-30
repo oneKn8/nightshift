@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32">
+  <!-- Nightcrew Favicon -->
+  <ellipse cx="50" cy="55" rx="38" ry="40" fill="#312e81"/>
+  <circle cx="36" cy="48" r="14" fill="#1e1b4b"/>
+  <circle cx="64" cy="48" r="14" fill="#1e1b4b"/>
+  <circle cx="36" cy="48" r="10" fill="#fbbf24"/>
+  <circle cx="64" cy="48" r="10" fill="#fbbf24"/>
+  <circle cx="38" cy="46" r="5" fill="#0a0a1a"/>
+  <circle cx="66" cy="46" r="5" fill="#0a0a1a"/>
+  <circle cx="40" cy="44" r="2.5" fill="white" opacity="0.8"/>
+  <circle cx="68" cy="44" r="2.5" fill="white" opacity="0.8"/>
+  <path d="M 46 58 L 50 64 L 54 58 Z" fill="#f97316"/>
+</svg>
