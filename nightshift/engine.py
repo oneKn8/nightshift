@@ -32,7 +32,7 @@ class NightShiftConfig:
 
 
 class NightShift:
-    """The agent runtime that makes autonomous AI research 10x cheaper.
+    """The agent runtime that cuts token spend for autonomous AI research.
 
     Sits between your agent and the LLM API. Intercepts calls, compresses
     input, deduplicates content, gates by confidence, manages history,

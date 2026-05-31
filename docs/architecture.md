@@ -91,7 +91,7 @@ Agent Process
 | Summarize | T5-small 60M | Relevant chunks | One-sentence summaries | ~50:1 |
 | Rank | MiniLM 22M | Summaries | Top-K by relevance | ~5:1 |
 
-**Aggregate compression:** 10M tokens --> 1.5K tokens (6,666:1)
+**Aggregate compression (illustrative):** 10M tokens --> 1.5K tokens
 
 **Model loading strategy:** Models are loaded on-demand, one at a time (memory constraint). After processing, unloaded. The pipeline processes in batch: all parsing first, then all extraction, etc. This minimizes model swap overhead.
 
@@ -334,7 +334,7 @@ openai.ChatCompletion.create = NightShiftMiddleware(
 | Metric | Target |
 |--------|--------|
 | Compression ratio (raw text) | > 1000:1 |
-| API call reduction | 30-50% via confidence gating |
+| API call reduction | via confidence gating (workload-dependent) |
 | History growth | O(1) instead of O(n) via sliding window |
 | Model swap latency | < 2s per swap |
 | Total local model disk | < 2GB |

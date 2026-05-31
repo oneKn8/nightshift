@@ -4,7 +4,7 @@
 
 <h1 align="center">NightShift</h1>
 
-<p align="center"><strong>The agent runtime that makes autonomous AI research 10x cheaper.</strong></p>
+<p align="center"><strong>The agent runtime that slashes token spend for autonomous AI research.</strong></p>
 
 AI Scientist costs $15/paper. AI-Researcher burns 2-5M tokens per task. AutoResearch hits context limits by iteration 60.
 
@@ -38,12 +38,14 @@ Without NightShift:
 
 With NightShift:
   Agent sends 10M tokens
-    --> Progressive compression (6,666:1 local reduction)
+    --> Progressive compression (heavy local reduction before the API)
     --> Confidence gate (skip API if local models handle it)
     --> Content deduplication (don't re-send what hasn't changed)
     --> Budget-optimal scheduling (spend $ where ROI is highest)
     --> API receives 1.5K tokens --> $1.50/task
 ```
+
+*Illustrative example; actual reduction depends on the workload. No benchmark numbers are published yet (see [Benchmarks](#benchmarks)).*
 
 ## Core Components
 
@@ -70,7 +72,7 @@ Not every decision needs the API. The router estimates local confidence before c
 - **Low confidence** (synthesis, hypothesis generation, strategic decisions) --> call API
 - **Ambiguous** (novelty evaluation, quality judgment) --> call API with compressed context
 
-Reduces API calls by 30-50%.
+Skips the API entirely for the calls local models can handle confidently.
 
 ### 3. Content Deduplication Layer
 
@@ -116,7 +118,7 @@ UCB1 bandit algorithm allocates budget optimally across:
 Research doesn't start from zero. Cross-session memory:
 - Facts, entities, and relations persist across runs
 - New research queries existing knowledge first
-- The system gets faster and cheaper over time
+- Repeated work reuses prior results instead of recomputing from scratch
 
 ## Architecture
 
@@ -160,15 +162,10 @@ Research doesn't start from zero. Cross-session memory:
 
 ## Benchmarks
 
-Based on our analysis of three major autonomous research systems:
-
-| Metric | AI Scientist | AI-Researcher | With NightShift |
-|--------|-------------|--------------|-----------------|
-| Tokens per task | ~30M | 2.2-5.8M | **0.3-0.8M** |
-| Cost per task | ~$15 | ~$15 | **$1.50-3** |
-| Runs overnight on laptop | No | No | **Yes** |
-| Gets faster over time | No | No | **Yes** |
-| Budget-optimal | No | No | **Provably (UCB1)** |
+Benchmarks are not published yet. A harness under `benchmarks/` is planned to compare
+NightShift against AI Scientist, AI-Researcher, and AutoResearch on tokens and cost per
+task; results will be added here once those runs are complete. Until then, treat the
+figures in this README as illustrative of the mechanism, not measured results.
 
 ## Quick Start
 
@@ -245,10 +242,10 @@ This project is accompanied by a research paper:
 
 Key contributions:
 1. Formal framework for token economics in multi-model agent systems
-2. Progressive compression pipeline achieving 6,666:1 token reduction
-3. Confidence-gated routing reducing API calls by 30-50%
+2. Progressive compression pipeline for large local token reduction before the API
+3. Confidence-gated routing that avoids the API calls local models can handle
 4. UCB1-based budget-optimal exploration with convergence guarantees
-5. Empirical evaluation: comparable quality at 10x lower cost
+5. A methodology for evaluating research quality per dollar across local and API models
 
 ## Why "NightShift"
 

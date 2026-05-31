@@ -1,4 +1,4 @@
-"""NightShift: Agent runtime that makes autonomous AI research 10x cheaper."""
+"""NightShift: Agent runtime that cuts token spend for autonomous AI research."""
 
 from nightshift.engine import NightShift
 from nightshift.loop import OvernightLoop
